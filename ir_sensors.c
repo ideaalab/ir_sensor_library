@@ -3,15 +3,25 @@
  * 
  * DEFINES QUE HAY QUE DECLARAR:
  * - IR_NUM_SENSORS: dice cuantos sensores estamos usando
- * - IR_CUT_VALUE: (opcional) valor de corte para detecta presencia de objeto
- * - IR_MAX_VALUE: (opcional) valor maximo de lectura por sensor
  * - IR_LED_EMITTER_PIN: (opcional) pin para emisor IR
+ * 
+ * Si declaramos IR_VARIABLE_TIMES podemos modificar el tiempo de encendido de
+ * IR, y el tiempo de corte sean variables. Podemos cambiarlos usando las variabes
+ * - IR_MAX_VALUES (int16)
+ * - IR_CUT_VALUES (int16)
+ * 
+ * Si no declaramos IR_VARIABLE_TIMES el tiempo maximo y el tiempo de corte vienen
+ * definifos por:
+ * - IR_CUT_VALUE: valor de corte para detecta presencia de objeto
+ * - IR_MAX_VALUE: valor maximo de lectura por sensor
+ * Si los declaramos como defines, podemos ponerles el valor que queramos, sino
+ * toman el valor por defecto de la libreria.
  * 
  * VARIABLES:
  * - IR_pins[]: asignar a esta variable el pin de cada sensor
  *				(IR_pins[0] = PIN_A3)
  * - IR_sensor_value[]: valor leido por cada sensor. Mientras mas alto mas
- *				distancia
+ *				distancia/menos reflectancia
  * - IR_sensor_state[]: un bit por cada sensor, es 1 si el valor del sensor
  *				esta por debajo de IR_CUT_VALUE
  * 
@@ -82,7 +92,7 @@ long time = 0;
 		time = get_timer1();
 		
 		for(i = 0; i < IR_NUM_SENSORS; i++){
-			if((input(IR_pins[i]) == FALSE) && (time < IR_sensor_value[i])){	//
+			if((input(IR_pins[i]) == FALSE) && (time < IR_sensor_value[i])){
 				IR_sensor_value[i] = time;
 				
 				if(time < IR_CUT_VALUE){
